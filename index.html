@@ -13,3 +13,28 @@
 <p>Test test test test test test test test.</p>
   
 </html>
+<script>
+    document.getElementById('wordFile').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const arrayBuffer = e.target.result;
+
+        // Extract plain text using mammoth.extractRawText
+        mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+            .then(function(result) {
+                const text = result.value; // The raw text
+                document.getElementById('output').innerText = text;
+                console.log(text);
+                
+            })
+            .catch(function(err) {
+                console.error(err);
+            });
+    };
+    reader.readAsArrayBuffer(file);
+});
+
+</script>

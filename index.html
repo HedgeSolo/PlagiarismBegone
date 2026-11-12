@@ -132,7 +132,7 @@
       color: var(--muted);
     }
 
-    .quick-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .quick-links { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .quick-links button { padding: 4px 10px; font-size: 0.82rem; }
 
     .error {
@@ -150,7 +150,7 @@
       border-radius: 12px;
       overflow: hidden;
       background: #fff;
-      min-height: 600px;
+      min-height: 650px;
     }
 
     .viewer-bar {
@@ -161,14 +161,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       font-size: 0.88rem;
+    }
+
+    .viewer-bar span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 55%;
     }
 
     iframe {
       width: 100%;
       flex: 1;
       border: none;
-      min-height: 560px;
+      min-height: 610px;
       background: #fff;
     }
 
@@ -199,19 +207,19 @@
     <!-- URL Viewer -->
     <section id="appView" class="hidden" style="width:100%;display:flex;flex-direction:column;align-items:center;flex:1;">
       <form id="urlForm" class="search-box">
-        <input id="urlInput" type="text" placeholder="Enter a URL to view via Supabase (e.g. example.com)..." required />
+        <input id="urlInput" type="text" placeholder="Enter a URL to view via Supabase (e.g. archive.org)..." required />
         <button id="goBtn" type="submit" class="primary">View!!!!</button>
       </form>
 
       <div class="options-row">
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-          <input id="stripAssetsCheck" type="checkbox" />
-          Strict mode (strip images &amp; external CSS so your browser makes zero direct requests)
+          <input id="strictModeCheck" type="checkbox" />
+          Strict mode (strip JS, images &amp; CSS — zero direct requests)
         </label>
         <div class="quick-links">
           <span>Try:</span>
+          <button type="button" data-url="https://archive.org">archive.org</button>
           <button type="button" data-url="https://example.com">example.com</button>
-          <button type="button" data-url="https://info.cern.ch">info.cern.ch</button>
           <button type="button" data-url="https://en.wikipedia.org/wiki/Startpage">Wikipedia: Startpage</button>
         </div>
       </div>
@@ -223,8 +231,7 @@
           <strong id="pageTitle">Page Title</strong>
           <span id="pageUrl" style="color:var(--muted);"></span>
         </div>
-        <!-- sandbox="" blocks all scripts inside the previewed page -->
-        <iframe id="previewFrame" sandbox=""></iframe>
+        <iframe id="previewFrame" sandbox="allow-scripts allow-forms allow-popups"></iframe>
       </div>
     </section>
   </main>
@@ -247,7 +254,7 @@
     const previewFrame = document.getElementById("previewFrame");
     const pageTitle = document.getElementById("pageTitle");
     const pageUrl = document.getElementById("pageUrl");
-    const stripAssetsCheck = document.getElementById("stripAssetsCheck");
+    const strictModeCheck = document.getElementById("strictModeCheck");
 
     // Theme handling
     if (localStorage.getItem("theme") === "light") {
@@ -297,6 +304,7 @@
       const pw = localStorage.getItem("access_password");
       if (!pw) return showLogin();
 
+      const isStrict = strictModeCheck.checked;
       appError.classList.add("hidden");
       goBtn.disabled = true;
       goBtn.textContent = "Loading...";
@@ -312,7 +320,7 @@
           },
           body: JSON.stringify({
             url: targetUrl,
-            stripAssets: stripAssetsCheck.checked
+            strictMode: isStrict
           })
         });
 
@@ -329,6 +337,12 @@
           return;
         }
 
+        // Apply sandbox policy BEFORE setting srcdoc so the browser enforces it on load
+        previewFrame.setAttribute(
+          "sandbox",
+          isStrict ? "" : "allow-scripts allow-forms allow-popups"
+        );
+
         pageTitle.textContent = data.title;
         pageUrl.textContent = data.finalUrl;
         previewFrame.srcdoc = data.html;
@@ -338,7 +352,7 @@
         appError.classList.remove("hidden");
       } finally {
         goBtn.disabled = false;
-        goBtn.textContent = "View Privately";
+        goBtn.textContent = "View!!!!";
       }
     }
 

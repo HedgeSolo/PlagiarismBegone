@@ -3,32 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StealthSearch — Private & Ad-Free</title>
+  <title>Private View — Test Portal</title>
   <style>
     :root {
-      --bg: #12141d;
-      --surface: #1b1e2b;
-      --surface-hover: #242838;
-      --border: #2e3348;
-      --text: #f1f3f9;
-      --muted: #98a0b8;
-      --accent: #657ef8;
-      --accent-hover: #526be8;
-      --green: #34d399;
-      --danger: #f87171;
+      --bg: #0f111a;
+      --surface: #1a1d2d;
+      --border: #2c3149;
+      --text: #e6e8f0;
+      --muted: #9499b3;
+      --accent: #6573ff;
+      --accent-hover: #505ee8;
+      --danger: #ff5c77;
     }
 
     body.light {
       --bg: #f6f7fb;
       --surface: #ffffff;
-      --surface-hover: #eef0f7;
-      --border: #dce0ec;
-      --text: #181b26;
-      --muted: #5e667d;
-      --accent: #4f67eb;
-      --accent-hover: #3f56d6;
-      --green: #059669;
-      --danger: #dc2626;
+      --border: #dcdfec;
+      --text: #1b1e2b;
+      --muted: #636982;
+      --accent: #4c5be8;
+      --accent-hover: #3b49d1;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,10 +35,8 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background 0.2s, color 0.2s;
     }
 
-    /* Top Nav */
     header {
       display: flex;
       justify-content: space-between;
@@ -53,80 +46,72 @@
       background: var(--surface);
     }
 
-    .brand {
-      font-weight: 700;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
+    .brand { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.3px; }
+    .brand span { color: var(--accent); }
 
-    .badge {
-      font-size: 0.72rem;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(52, 211, 153, 0.14);
-      color: var(--green);
-      font-weight: 600;
-    }
-
-    .nav-actions { display: flex; gap: 10px; }
+    .header-actions { display: flex; gap: 10px; }
 
     button {
-      cursor: pointer;
-      border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
+      border: 1px solid var(--border);
       padding: 8px 14px;
       border-radius: 8px;
-      font-size: 0.88rem;
-      font-weight: 500;
-      transition: 0.15s;
+      cursor: pointer;
+      font-size: 0.9rem;
     }
 
-    button:hover { background: var(--surface-hover); }
+    button:hover { border-color: var(--accent); }
 
     button.primary {
       background: var(--accent);
       border-color: var(--accent);
       color: #fff;
+      font-weight: 600;
     }
 
     button.primary:hover { background: var(--accent-hover); }
 
-    /* Screens */
-    .hidden { display: none !important; }
-
-    /* Lock Screen */
-    #lockScreen {
+    main {
       flex: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 20px;
+      padding: 36px 20px;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
     }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
+      border-radius: 14px;
+      padding: 28px;
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
+      margin-top: 60px;
       text-align: center;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
-    .card h1 { font-size: 1.4rem; margin-bottom: 8px; }
-    .card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 20px; line-height: 1.5; }
+    .card h2 { margin-bottom: 8px; font-size: 1.3rem; }
+    .card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 20px; }
 
-    input[type="password"], input[type="text"] {
+    .search-box {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    input[type="text"], input[type="password"] {
+      flex: 1;
       width: 100%;
       padding: 12px 16px;
       border-radius: 10px;
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--surface);
       color: var(--text);
       font-size: 1rem;
       outline: none;
@@ -134,144 +119,242 @@
 
     input:focus { border-color: var(--accent); }
 
-    .error-msg {
-      color: var(--danger);
-      font-size: 0.85rem;
-      margin-top: 10px;
-      min-height: 20px;
-    }
-
-    /* Main Search Area */
-    #appScreen {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .hero {
-      max-width: 680px;
+    .options-row {
       width: 100%;
-      margin: 10vh auto 24px;
-      padding: 0 20px;
-      text-align: center;
-      transition: margin 0.25s;
-    }
-
-    .hero.compact {
-      margin: 20px auto 16px;
-    }
-
-    .hero h2 { font-size: 2rem; margin-bottom: 8px; }
-    .hero.compact h2, .hero.compact .subtitle { display: none; }
-    .subtitle { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
-
-    .search-box {
-      display: flex;
-      gap: 8px;
-    }
-
-    .quick-pills {
+      max-width: 760px;
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .pill {
-      font-size: 0.8rem;
-      padding: 5px 12px;
-      border-radius: 999px;
-      color: var(--muted);
-    }
-
-    /* Results & Anonymous View */
-    .content-area {
-      max-width: 960px;
-      width: 100%;
-      margin: 0 auto 40px;
-      padding: 0 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .result-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-bottom: 12px;
-    }
-
-    .result-url { color: var(--green); font-size: 0.82rem; margin-bottom: 4px; word-break: break-all; }
-    .result-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
-    .result-snippet { color: var(--muted); font-size: 0.9rem; line-height: 1.45; margin-bottom: 10px; }
-
-    .anon-bar {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-bottom: none;
-      border-radius: 12px 12px 0 0;
-      padding: 10px 16px;
-      display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
+      margin-bottom: 20px;
+      font-size: 0.88rem;
+      color: var(--muted);
     }
 
-    .anon-info { font-size: 0.85rem; color: var(--muted); word-break: break-all; }
-    .anon-info strong { color: var(--green); }
+    .quick-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .quick-links button { padding: 4px 10px; font-size: 0.82rem; }
+
+    .error {
+      color: var(--danger);
+      margin-bottom: 14px;
+      font-size: 0.92rem;
+    }
+
+    .viewer-container {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      min-height: 600px;
+    }
+
+    .viewer-bar {
+      background: var(--surface);
+      color: var(--text);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+    }
 
     iframe {
       width: 100%;
-      height: 70vh;
-      border: 1px solid var(--border);
-      border-radius: 0 0 12px 12px;
-      background: #ffffff;
+      flex: 1;
+      border: none;
+      min-height: 560px;
+      background: #fff;
     }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-
   <header>
-    <div class="brand" onclick="resetHome()">
-      <span>🛡️ StealthSearch</span>
-      <span class="badge">Zero Logs • Ad-Free</span>
-    </div>
-    <div class="nav-actions">
-      <button onclick="toggleTheme()" id="themeBtn">☀️ Light</button>
-      <button onclick="lockApp()" id="lockBtn" class="hidden">🔒 Lock</button>
+    <div class="brand">Private<span>View</span> <small style="font-weight:400;color:var(--muted);">(Test Mode)</small></div>
+    <div class="header-actions">
+      <button id="themeBtn" type="button">Toggle Theme</button>
+      <button id="lockBtn" type="button" class="hidden">Lock</button>
     </div>
   </header>
 
-  <!-- Password Gate -->
-  <main id="lockScreen">
-    <div class="card">
-      <h1>Private Access</h1>
-      <p>Enter the shared passphrase to connect to the privacy proxy.</p>
-      <form onsubmit="unlockApp(event)">
-        <input type="password" id="passwordInput" placeholder="Enter access password..." required />
-        <button type="submit" class="primary" style="width: 100%; margin-top: 12px;" id="unlockBtn">
-          Unlock Search
-        </button>
+  <main>
+    <!-- Password Gate -->
+    <section id="loginView" class="card">
+      <h2>Enter Access Password</h2>
+      <p>Protected proxy portal. Enter the shared password to unlock.</p>
+      <div id="loginError" class="error hidden"></div>
+      <form id="loginForm" style="display:flex;flex-direction:column;gap:12px;">
+        <input id="passwordInput" type="password" placeholder="Access password..." required />
+        <button type="submit" class="primary">Unlock</button>
       </form>
-      <div class="error-msg" id="lockError"></div>
-    </div>
+    </section>
+
+    <!-- URL Viewer -->
+    <section id="appView" class="hidden" style="width:100%;display:flex;flex-direction:column;align-items:center;flex:1;">
+      <form id="urlForm" class="search-box">
+        <input id="urlInput" type="text" placeholder="Enter a URL to view via Supabase (e.g. example.com)..." required />
+        <button id="goBtn" type="submit" class="primary">View Privately</button>
+      </form>
+
+      <div class="options-row">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input id="stripAssetsCheck" type="checkbox" />
+          Strict mode (strip images &amp; external CSS so your browser makes zero direct requests)
+        </label>
+        <div class="quick-links">
+          <span>Try:</span>
+          <button type="button" data-url="https://example.com">example.com</button>
+          <button type="button" data-url="https://info.cern.ch">info.cern.ch</button>
+          <button type="button" data-url="https://en.wikipedia.org/wiki/Startpage">Wikipedia: Startpage</button>
+        </div>
+      </div>
+
+      <div id="appError" class="error hidden"></div>
+
+      <div id="viewerContainer" class="viewer-container hidden">
+        <div class="viewer-bar">
+          <strong id="pageTitle">Page Title</strong>
+          <span id="pageUrl" style="color:var(--muted);"></span>
+        </div>
+        <!-- sandbox="" blocks all scripts inside the previewed page -->
+        <iframe id="previewFrame" sandbox=""></iframe>
+      </div>
+    </section>
   </main>
 
-  <!-- Main App -->
-  <main id="appScreen" class="hidden">
-    <section class="hero" id="heroSection">
-      <h2>Browse & Search Without Trackers</h2>
-      <p class="subtitle">Type any website URL to open it in <strong>Anonymous View</strong>, or enter keywords for a demo search.</p>
+  <script>
+    const SUPABASE_FUNCTION_URL = "https://kydjfvycdgwoifhzwrao.supabase.co/functions/v1/proxy";
+    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
 
-      <form class="search-box" onsubmit="runQuery(event)">
-        <input type="text" id="queryInput" placeholder="Try wikipedia.org, example.com, or a search phrase..." required />
-        <button type="submit" class="primary" id="searchBtn">Go</button>
-      </form>
+    const loginView = document.getElementById("loginView");
+    const appView = document.getElementById("appView");
+    const lockBtn = document.getElementById("lockBtn");
+    const loginForm = document.getElementById("loginForm");
+    const passwordInput = document.getElementById("passwordInput");
+    const loginError = document.getElementById("loginError");
+    const urlForm = document.getElementById("urlForm");
+    const urlInput = document.getElementById("urlInput");
+    const goBtn = document.getElementById("goBtn");
+    const appError = document.getElementById("appError");
+    const viewerContainer = document.getElementById("viewerContainer");
+    const previewFrame = document.getElementById("previewFrame");
+    const pageTitle = document.getElementById("pageTitle");
+    const pageUrl = document.getElementById("pageUrl");
+    const stripAssetsCheck = document.getElementById("stripAssetsCheck");
 
-      <div class="quick-pills" id="quickPills">
-        <button type="button" class="pill" onclick="quickTry('example.com')">🔗 example.com</button>
-        <button type="button" class="pill" onclick="quickTry('en.wikipedia.org/wiki/Privacy')">🔗
+    // Theme handling
+    if (localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light");
+    }
+    document.getElementById("themeBtn").addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+    });
+
+    function showApp() {
+      loginView.classList.add("hidden");
+      appView.classList.remove("hidden");
+      lockBtn.classList.remove("hidden");
+    }
+
+    function showLogin(message = "") {
+      localStorage.removeItem("access_password");
+      appView.classList.add("hidden");
+      lockBtn.classList.add("hidden");
+      loginView.classList.remove("hidden");
+      if (message) {
+        loginError.textContent = message;
+        loginError.classList.remove("hidden");
+      } else {
+        loginError.classList.add("hidden");
+      }
+    }
+
+    if (localStorage.getItem("access_password")) {
+      showApp();
+    }
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const pw = passwordInput.value.trim();
+      if (!pw) return;
+      localStorage.setItem("access_password", pw);
+      passwordInput.value = "";
+      loginError.classList.add("hidden");
+      showApp();
+    });
+
+    lockBtn.addEventListener("click", () => showLogin());
+
+    async function loadUrl(targetUrl) {
+      const pw = localStorage.getItem("access_password");
+      if (!pw) return showLogin();
+
+      appError.classList.add("hidden");
+      goBtn.disabled = true;
+      goBtn.textContent = "Loading...";
+
+      try {
+        const res = await fetch(SUPABASE_FUNCTION_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+            "x-access-password": pw
+          },
+          body: JSON.stringify({
+            url: targetUrl,
+            stripAssets: stripAssetsCheck.checked
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.status === 401) {
+          showLogin("Incorrect password. Please try again.");
+          return;
+        }
+
+        if (!res.ok) {
+          appError.textContent = data.error || "Failed to load page.";
+          appError.classList.remove("hidden");
+          return;
+        }
+
+        pageTitle.textContent = data.title;
+        pageUrl.textContent = data.finalUrl;
+        previewFrame.srcdoc = data.html;
+        viewerContainer.classList.remove("hidden");
+      } catch (_err) {
+        appError.textContent = "Network error reaching Supabase.";
+        appError.classList.remove("hidden");
+      } finally {
+        goBtn.disabled = false;
+        goBtn.textContent = "View Privately";
+      }
+    }
+
+    urlForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (urlInput.value.trim()) {
+        loadUrl(urlInput.value.trim());
+      }
+    });
+
+    document.querySelectorAll("[data-url]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        urlInput.value = btn.dataset.url;
+        loadUrl(btn.dataset.url);
+      });
+    });
+  </script>
+</body>
+</html>
